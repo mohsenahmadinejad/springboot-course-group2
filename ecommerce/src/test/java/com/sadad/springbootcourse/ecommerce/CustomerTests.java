@@ -1,11 +1,15 @@
 package com.sadad.springbootcourse.ecommerce;
 
 import com.sadad.springbootcourse.ecommerce.entity.Customer;
+import com.sadad.springbootcourse.ecommerce.entity.Order;
 import com.sadad.springbootcourse.ecommerce.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -16,7 +20,7 @@ class CustomerTests {
 
     @Test
     void saveCustomer() {
-        Customer customer=new Customer(null,"Mohsen","ahmadi","mohsen@gmail.com");
+        Customer customer=new Customer(null,"Mohsen","ahmadi","mohsen@gmail.com",null);
 //        Customer customer=Customer.builder().
 //                firstName("mohsen").
 //                lastName("ahmadi").
@@ -28,7 +32,7 @@ class CustomerTests {
 
     @Test
     void updateCustomer() {
-        Customer customer=new Customer(40L,"Ali40","mohammadi40","ali40@gmail.com");
+        Customer customer=new Customer(40L,"Ali40","mohammadi40","ali40@gmail.com",null);
         customerRepository.save(customer);
     }
 
@@ -87,4 +91,43 @@ class CustomerTests {
         Integer updatedRowCount = customerRepository.updateFirstNameInCustomerByQuery("Reza",10L);
         System.out.println("rows updated =" +updatedRowCount);
     }
+
+    @Test
+    void saveCustomerWithOrders() {
+        Order order1= Order.builder()
+                .orderDate(LocalDateTime.now())
+                .totalAmount(10D)
+                .build();
+        Order order2= Order.builder()
+                .orderDate(LocalDateTime.now())
+                .totalAmount(11D)
+                .build();
+        List<Order> orderList=new ArrayList<>();
+        orderList.add(order1);
+        orderList.add(order2);
+
+
+
+        Customer customer= Customer.builder()
+                .email("mohsen@gmail")
+                .firstName("mohsen")
+                .lastName("ahmadi")
+                .orders(orderList)
+                .build();
+
+        order1.setCustomer(customer);
+        order2.setCustomer(customer);
+
+        customerRepository.save(customer);
+
+    }
+
+    @Test
+    @Transactional
+    void getCustomerById() {
+        Customer customer=customerRepository.findById(65L).get();
+        System.out.println(customer.getOrders());
+
+    }
+
 }

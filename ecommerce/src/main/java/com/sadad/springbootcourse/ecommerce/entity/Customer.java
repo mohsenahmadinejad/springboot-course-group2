@@ -1,23 +1,29 @@
 package com.sadad.springbootcourse.ecommerce.entity;
 
+import com.sadad.springbootcourse.ecommerce.config.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Objects;
 
-@Data
+//@Data
+//@ToString(exclude = "orders")
+//@EqualsAndHashCode(exclude = "orders")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "tbl_customer"
-        ,
-        uniqueConstraints =@UniqueConstraint(
-                name = "email_enique",
-                columnNames = "email_address"
-        )
+//        ,
+//        uniqueConstraints =@UniqueConstraint(
+//                name = "email_enique",
+//                columnNames = "email_address"
+//        )
 )
-public class Customer {
+public class Customer extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +34,12 @@ public class Customer {
 
     @Column(name = "email_address")
     private String email;
+
+
+    @OneToMany(mappedBy = "customer" ,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "fk_customer_id" ,referencedColumnName = "id" ,nullable = false )
+    private List<Order> orders;
+
 
 }
