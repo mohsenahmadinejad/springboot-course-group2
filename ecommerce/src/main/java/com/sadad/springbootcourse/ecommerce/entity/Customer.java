@@ -1,5 +1,6 @@
 package com.sadad.springbootcourse.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sadad.springbootcourse.ecommerce.config.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +40,7 @@ public class Customer extends Auditable {
     @OneToMany(mappedBy = "customer" ,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 //    @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "fk_customer_id" ,referencedColumnName = "id" ,nullable = false )
+    @JsonIgnore
     private List<Order> orders;
 
 

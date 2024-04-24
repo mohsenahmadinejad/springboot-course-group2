@@ -1,6 +1,7 @@
 package com.sadad.springbootcourse.ecommerce.repository;
 
 import com.sadad.springbootcourse.ecommerce.entity.Customer;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,6 +39,10 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
     @Query("update  Customer c set c.firstName=?1 where c.id =?2")
     public Integer updateFirstNameInCustomerByQuery(String firstName, Long id);
 
+    public List<Customer> findByLastName(String lastName, Pageable page);
 
+
+    @Query("select c from Customer c where c.lastName=?1")
+    public List<Customer> getCustomerByLastNameQueryPagination(String lastName,Pageable pageable);
 
 }
